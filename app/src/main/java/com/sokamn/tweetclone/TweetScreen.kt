@@ -15,8 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
@@ -27,6 +28,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +49,8 @@ import androidx.compose.ui.unit.sp
 Gris: 0xFF828286
 Negro: 0xFF010001
 Azul verificado: 0xFF1A99ED
+ Verde Retweet: 0xFF19CF85
+ rojo me gusta:  0xFFF21B81
  */
 
 @Preview
@@ -56,8 +65,6 @@ fun TweetScreen() {
         ) {
         Tweet()
     }
-
-
 }
 
 @Composable
@@ -92,13 +99,17 @@ fun Footer() {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(modifier = Modifier.weight(3f).padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(modifier = Modifier
+            .weight(3f)
+            .padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             CommentButton()
             RetweetButton()
             LikeButton()
-            TrendStats()
+            Visualisations()
         }
-        Row(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(modifier = Modifier
+            .weight(1f)
+            .padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             SaveButton(modifier = Modifier)
             ShareButton(modifier = Modifier)
         }
@@ -130,24 +141,35 @@ fun SaveButton(modifier: Modifier) {
 
 @Composable
 fun LikeButton() {
+    var likes by rememberSaveable {
+        mutableIntStateOf(1)
+    }
+    var liked by rememberSaveable {
+        mutableStateOf(false)
+    }
     Row(Modifier.clickable {
-
+        if(liked){
+            likes--
+        }else{
+            likes++
+        }
+        liked = !liked
     }, verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            imageVector = Icons.Default.FavoriteBorder,
+            imageVector = if(liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
             contentDescription = "Like",
-            tint = Color(0xFF828286)
+            tint = if(liked) Color(0xFFF21B81) else Color(0xFF828286)
         )
-        Text(text = "1", color = Color(0xFF828286))
+        Text(text = likes.toString(), color = if (liked) Color(0xFFF21B81) else Color(0xFF828286))
     }
 }
 
 @Composable
-fun TrendStats() {
+fun Visualisations() {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = Icons.Default.Menu,
-            contentDescription = "Retweet",
+            contentDescription = "Visualisations",
             tint = Color(0xFF828286)
         )
         Text(text = "1", color = Color(0xFF828286))
@@ -156,15 +178,26 @@ fun TrendStats() {
 
 @Composable
 fun RetweetButton() {
+    var retweets by remember {
+        mutableIntStateOf(1)
+    }
+    var retweeted by remember {
+        mutableStateOf(false)
+    }
     Row(Modifier.clickable {
-
+        if(retweeted){
+            retweets--
+        }else{
+            retweets++
+        }
+        retweeted = !retweeted
     }, verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = Icons.Default.Refresh,
             contentDescription = "Retweet",
-            tint = Color(0xFF828286)
+            tint = if(retweeted) Color(0xFF19CF85) else Color(0xFF828286)
         )
-        Text(text = "1", color = Color(0xFF828286))
+        Text(text = retweets.toString(), color = if(retweeted) Color(0xFF19CF85) else Color(0xFF828286))
     }
 }
 
@@ -174,7 +207,7 @@ fun CommentButton() {
 
     }, verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            imageVector = Icons.Default.Home,
+            imageVector = Icons.Default.MailOutline,
             contentDescription = "Comments",
             tint = Color(0xFF828286)
         )
