@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             TweetCloneTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-
+                    TweetScreen()
                 }
             }
         }
