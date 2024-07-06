@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -49,8 +50,8 @@ import androidx.compose.ui.unit.sp
 Gris: 0xFF828286
 Negro: 0xFF010001
 Azul verificado: 0xFF1A99ED
- Verde Retweet: 0xFF19CF85
- rojo me gusta:  0xFFF21B81
+Verde Retweet: 0xFF19CF85
+rojo me gusta:  0xFFF21B81
  */
 
 @Preview
@@ -64,6 +65,7 @@ fun TweetScreen() {
 
         ) {
         Tweet()
+
     }
 }
 
@@ -72,12 +74,16 @@ fun Tweet() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(700.dp)
     ) {
         ProfileLogo(Modifier)
         Spacer(modifier = Modifier.size(8.dp))
         Main(Modifier)
     }
+}
+
+@Composable
+fun TweetDivider() {
+    HorizontalDivider(Modifier.fillMaxWidth(), color = Color(0xFF828286))
 }
 
 @Composable
@@ -99,17 +105,21 @@ fun Footer() {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(modifier = Modifier
-            .weight(3f)
-            .padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier
+                .weight(3f)
+                .padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             CommentButton()
             RetweetButton()
             LikeButton()
             Visualisations()
         }
-        Row(modifier = Modifier
-            .weight(1f)
-            .padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             SaveButton(modifier = Modifier)
             ShareButton(modifier = Modifier)
         }
@@ -119,7 +129,7 @@ fun Footer() {
 
 @Composable
 fun ShareButton(modifier: Modifier) {
-    IconButton(modifier = modifier.size(24.dp),onClick = {}) {
+    IconButton(modifier = modifier.size(24.dp), onClick = {}) {
         Icon(
             imageVector = Icons.Default.Share,
             contentDescription = "Share",
@@ -130,7 +140,7 @@ fun ShareButton(modifier: Modifier) {
 
 @Composable
 fun SaveButton(modifier: Modifier) {
-    IconButton(modifier = modifier.size(24.dp),onClick = {}) {
+    IconButton(modifier = modifier.size(24.dp), onClick = {}) {
         Icon(
             imageVector = Icons.Default.ShoppingCart,
             contentDescription = "Save",
@@ -148,17 +158,17 @@ fun LikeButton() {
         mutableStateOf(false)
     }
     Row(Modifier.clickable {
-        if(liked){
+        if (liked) {
             likes--
-        }else{
+        } else {
             likes++
         }
         liked = !liked
     }, verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            imageVector = if(liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            imageVector = if (liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
             contentDescription = "Like",
-            tint = if(liked) Color(0xFFF21B81) else Color(0xFF828286)
+            tint = if (liked) Color(0xFFF21B81) else Color(0xFF828286)
         )
         Text(text = likes.toString(), color = if (liked) Color(0xFFF21B81) else Color(0xFF828286))
     }
@@ -185,9 +195,9 @@ fun RetweetButton() {
         mutableStateOf(false)
     }
     Row(Modifier.clickable {
-        if(retweeted){
+        if (retweeted) {
             retweets--
-        }else{
+        } else {
             retweets++
         }
         retweeted = !retweeted
@@ -195,9 +205,12 @@ fun RetweetButton() {
         Icon(
             imageVector = Icons.Default.Refresh,
             contentDescription = "Retweet",
-            tint = if(retweeted) Color(0xFF19CF85) else Color(0xFF828286)
+            tint = if (retweeted) Color(0xFF19CF85) else Color(0xFF828286)
         )
-        Text(text = retweets.toString(), color = if(retweeted) Color(0xFF19CF85) else Color(0xFF828286))
+        Text(
+            text = retweets.toString(),
+            color = if (retweeted) Color(0xFF19CF85) else Color(0xFF828286)
+        )
     }
 }
 
